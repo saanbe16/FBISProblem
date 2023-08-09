@@ -1,22 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Reflection.Emit;
 using System.Text;
 
 namespace FBISProblem
 {
-	public class GenerateFiles
+	public class FileGenerator
 	{
-		public GenerateFiles()
-		{
-		}
 
-        static public void Main(String[] args)
-        {
-            createInitialFileSetUp();
-            createInputFiles();
-        }
-
-        public static void createInitialFileSetUp()
+        private void createInitialFileSetUp()
         {
             Directory.CreateDirectory("CombinedLetters");
             Directory.CreateDirectory("CombinedLetters/Input");
@@ -25,8 +17,9 @@ namespace FBISProblem
             Directory.CreateDirectory("CombinedLetters/Archive");
             Directory.CreateDirectory("CombinedLetters/Output");
         }
+    
 
-        public static void createInputFiles()
+        private void createInputFiles()
         {
             Random rnd = new Random();
             double randNum;
@@ -40,7 +33,6 @@ namespace FBISProblem
                 {
                     studentId = "01"+rnd.Next(100000,999999).ToString();
                     randNum = rnd.NextDouble();
-                    Console.WriteLine("StudentId ="+ studentId+ " date = "+ date+ "rand ="+ randNum);
                     if (randNum >0.35) // Assume 65% chance of admission for randomness
                     {
                         Directory.CreateDirectory("CombinedLetters/Input/Admission/"+date);
@@ -67,6 +59,11 @@ namespace FBISProblem
 
             }
 
+        }
+        public void generate()
+        {
+            createInitialFileSetUp();
+            createInputFiles();
         }
     }
 }
