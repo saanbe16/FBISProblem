@@ -23,7 +23,7 @@ namespace FBISProblem
         {
             Random rnd = new Random();
             double randNum;
-            int day = 20;
+            int day = 26;
             string studentId;
             for (int i=0; i<5; i++) // creating test data for 5 days
             {
@@ -33,7 +33,7 @@ namespace FBISProblem
                 {
                     studentId = "01"+rnd.Next(100000,999999).ToString();
                     randNum = rnd.NextDouble();
-                    if (randNum>0.35) // Assume 65% chance of admission for randomness
+                    if (randNum< 0.8 && randNum >0.35) // Assume 45% chance of admission for randomness
                     {
                         Directory.CreateDirectory("CombinedLetters/Input/Admission/"+date);
                         // Creating admission file
