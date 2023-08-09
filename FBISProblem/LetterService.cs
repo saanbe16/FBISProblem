@@ -11,7 +11,6 @@ namespace FBISProblem
         {
             string readFile1 = File.ReadAllText(inputFile1);
             string readFile2 = File.ReadAllText(inputFile2);
-            Console.WriteLine(readFile1+readFile2);
             Directory.CreateDirectory(resultFile);
 
             using (FileStream fs = File.Create(resultFile+"/combined-"+inputFile1.Substring(inputFile1.Length - 12)))

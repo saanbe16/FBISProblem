@@ -33,7 +33,7 @@ namespace FBISProblem
                 {
                     studentId = "01"+rnd.Next(100000,999999).ToString();
                     randNum = rnd.NextDouble();
-                    if (randNum >0.35) // Assume 65% chance of admission for randomness
+                    if (randNum>0.35) // Assume 65% chance of admission for randomness
                     {
                         Directory.CreateDirectory("CombinedLetters/Input/Admission/"+date);
                         // Creating admission file

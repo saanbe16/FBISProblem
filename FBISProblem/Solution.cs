@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace FBISProblem
 {
@@ -9,7 +10,8 @@ namespace FBISProblem
         {
             FileGenerator generator = new FileGenerator();
             LetterService service = new LetterService();
-            //generator.generate();
+            generator.generate();
+            Console.WriteLine();
             Console.WriteLine("Generated new files");
 
             // Check for past days
@@ -36,9 +38,13 @@ namespace FBISProblem
                         admissionFiles.Add(fi.Name.Substring(fi.Name.Length-12));
                     }
                     directory = new DirectoryInfo(dir);
+                    Console.WriteLine(date);
+                    string textReport= date[4] +""+ date[5] +"/"+ date[6..] +"/"+ date.Substring(0,4) + " Report\n-------------------\n\n";
+                    List<string> reportIds = new List<string>();
                     foreach (FileInfo fi in directory.GetFiles()) // adding to map
                     {
                         string file = fi.Name.Substring(fi.Name.Length - 12);
+                        reportIds.Add(file.Substring(0, file.Length - 4));
                         if (admissionFiles.Contains(file))
                         {
                             // COMBINATION CODE HERE
@@ -47,6 +53,18 @@ namespace FBISProblem
                             string outputFile = "CombinedLetters/Output/"+date;
                             service.CombineTwoLetters(admissionFile,scholarshipFile,outputFile);
                         }
+                    }
+                    textReport += "Number of combined letters: " + reportIds.Count()+"\n";
+                    foreach(string id in reportIds)
+                    {
+                        textReport += id+"\n";
+                    }
+                    Console.WriteLine(textReport);
+                    using (FileStream fs = File.Create("CombinedLetters/Output/" + date+"/textReport.txt"))
+                    {
+                        byte[] info = new UTF8Encoding(true).GetBytes(textReport);
+                        // Add some information to the file.
+                        fs.Write(info, 0, info.Length);
                     }
                 }
             }
