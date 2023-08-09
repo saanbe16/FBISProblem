@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+
 namespace FBISProblem
 {
 	public class Solution
@@ -6,6 +8,7 @@ namespace FBISProblem
         static public void Main(String[] args)
         {
             FileGenerator generator = new FileGenerator();
+            LetterService service = new LetterService();
             //generator.generate();
             Console.WriteLine("Generated new files");
 
@@ -39,12 +42,15 @@ namespace FBISProblem
                         if (admissionFiles.Contains(file))
                         {
                             // COMBINATION CODE HERE
+                            string scholarshipFile = dir + "/" + fi.Name;
+                            string admissionFile = admissionDirectory + '/' + fi.Name.Replace("scholarship", "admission");
+                            string outputFile = "CombinedLetters/Output/"+date;
+                            service.CombineTwoLetters(admissionFile,scholarshipFile,outputFile);
                         }
                     }
                 }
             }
 
-            Console.Read();
 
         }
 
