@@ -16,13 +16,12 @@ namespace FBISProblem
 
             // Check for past days
             HashSet<string> admissionDirSet = new HashSet<string>();
-            var directories = Directory.GetDirectories("CombinedLetters/Input/Admission");
-            foreach(string dir in directories)
+            var admissionDirectories = Directory.GetDirectories("CombinedLetters/Input/Admission");
+            foreach(string dir in admissionDirectories)
             {
                 admissionDirSet.Add(dir.Substring(dir.Length - 8)); // add date folder name
-
             }
-            directories = Directory.GetDirectories("CombinedLetters/Input/Scholarship");
+            var directories = Directory.GetDirectories("CombinedLetters/Input/Scholarship");
             foreach (string dir in directories)
 
             {
@@ -68,8 +67,19 @@ namespace FBISProblem
                     }
                 }
             }
+            // Archive all directories
 
+            //Directory.Move("CombinedLShow potential fixesetters/Input/Admission", "CombinedLetters/Archive/Admission");
+            var directory2 = new DirectoryInfo("CombinedLetters/Input/Admission");
+            foreach (DirectoryInfo fi in directory2.GetDirectories()) // adding to map
+            {
+                Console.WriteLine(fi.ToString());
+                Directory.Move(fi.ToString(), "CombinedLetters/Archive/"+fi.Name);
 
+            }
+            //Console.WriteLine(dir);
+
+            Console.Read();
         }
 
     }
