@@ -31,6 +31,7 @@ namespace FBISProblem
                     Console.WriteLine(" Enter 3 to Exit program\n");
 
                     x = Console.Read() - 48;
+                    Console.Read(); // getting rid of extra return character"
                     if (x == 2)
                     {
                         generator.generate();
@@ -40,6 +41,7 @@ namespace FBISProblem
                     {
                         run();
                         Console.WriteLine("Program Completed");
+                        break;
                     }
                 }
             }
@@ -53,73 +55,79 @@ namespace FBISProblem
             HashSet<string> admissionDirSet = new HashSet<string>();
             try
             {
+                // get and store all date style directories in /Input/Admission
                 var admissionDirectories = Directory.GetDirectories("CombinedLetters/Input/Admission");
 
                 foreach (string dir in admissionDirectories)
                 {
                     admissionDirSet.Add(dir.Substring(dir.Length - 8)); // add date folder name
                 }
-                var directories = Directory.GetDirectories("CombinedLetters/Input/Scholarship");
-                foreach (string dir in directories)
 
+                var directories = Directory.GetDirectories("CombinedLetters/Input/Scholarship"); // get and store all date style directories in /Input/Scholarship
+
+                foreach (string dir in directories)
                 {
                     string date = dir.Substring(dir.Length - 8);
-                    if (admissionDirSet.Contains(date))
+                    if (admissionDirSet.Contains(date)) // if the same date folders exist in Admission and Scholarship continue
                     {
                         string admissionDirectory = dir.Replace("Scholarship", "Admission");
                         HashSet<string> admissionFiles = new HashSet<string>();
+                        // Get and store all file names in common date/Admission directory
                         var directory = new DirectoryInfo(admissionDirectory);
                         foreach (FileInfo fi in directory.GetFiles()) // adding to map
                         {
                             admissionFiles.Add(fi.Name.Substring(fi.Name.Length - 12));
                         }
+                        // Get and store all file names in common date/Scholarship directory
                         directory = new DirectoryInfo(dir);
-                        string textReport = date[4] + "" + date[5] + "/" + date[6..] + "/" + date.Substring(0, 4) + " Report\n-------------------\n\n";
-                        List<string> reportIds = new List<string>();
-                        foreach (FileInfo fi in directory.GetFiles()) // adding to map
+                        string textReport = date[4] + "" + date[5] + "/" + date[6..] + "/" + date.Substring(0, 4) + " Report\n-------------------\n\n"; // start text report file
+                        List<string> reportIds = new List<string>(); // create ids list for text report file
+                        foreach (FileInfo fi in directory.GetFiles()) 
                         {
                             string file = fi.Name.Substring(fi.Name.Length - 12);
-                            if (admissionFiles.Contains(file))
+                            if (admissionFiles.Contains(file)) // if the same studentId is present in the admissions folder as the scholarship folder continue and combine folders
                             {
                                 // COMBINATION CODE HERE
                                 reportIds.Add(file.Substring(0, file.Length - 4));
-
                                 string scholarshipFile = dir + "/" + fi.Name;
                                 string admissionFile = admissionDirectory + '/' + fi.Name.Replace("scholarship", "admission");
                                 string outputFile = "CombinedLetters/Output/" + date;
-                                service.CombineTwoLetters(admissionFile, scholarshipFile, outputFile);
+                                service.CombineTwoLetters(admissionFile, scholarshipFile, outputFile); // combine files
                             }
                         }
                         textReport += "Number of combined letters: " + reportIds.Count() + "\n";
-                        foreach (string id in reportIds)
+                        foreach (string id in reportIds) // create text report string
                         {
                             textReport += id + "\n";
                         }
-                        using (FileStream fs = File.Create("CombinedLetters/Output/" + date + "/textReport.txt"))
+                    Directory.CreateDirectory("CombinedLetters/Output/"+date);
+                    using (FileStream fs = File.Create("CombinedLetters/Output/" + date + "/textReport.txt")) // create text report file
                         {
                             byte[] info = new UTF8Encoding(true).GetBytes(textReport);
                             // Add some information to the file.
                             fs.Write(info, 0, info.Length);
                         }
-                        admissionFiles.Clear();
+                        admissionFiles.Clear(); // clear set to start again for next loop iterration
                     }
                 }
-                //Archive all directories
+                Console.WriteLine("Files succfully combined");
+                Console.WriteLine("Text Reports created");
 
-                // Directory.Move("CombinedLShow potential fixesetters/Input/Admission", "CombinedLetters/Archive/Admission");
-                var directory2 = new DirectoryInfo("CombinedLetters/Input/Admission");
+                //Archive all input  directories
+                var directory2 = new DirectoryInfo("CombinedLetters/Input/Admission"); // get all admission directiories
                 foreach (DirectoryInfo fi in directory2.GetDirectories())
                 {
-                    Directory.Move(fi.ToString(), "CombinedLetters/Archive/Admission" + fi.Name);
+                    Directory.Move(fi.ToString(), "CombinedLetters/Archive/Admission" + fi.Name); // move directory to Archive folder
                 }
-                directory2 = new DirectoryInfo("CombinedLetters/Input/Scholarship");
+                directory2 = new DirectoryInfo("CombinedLetters/Input/Scholarship");// get all schilarship directiories
                 foreach (DirectoryInfo fi in directory2.GetDirectories())
                 {
-                    Directory.Move(fi.ToString(), "CombinedLetters/Archive/Scolarship" + fi.Name);
+                    Directory.Move(fi.ToString(), "CombinedLetters/Archive/Scolarship" + fi.Name); // move directory to Archive folder
                 }
-            }catch(Exception e)
+            }
+            catch(Exception e)
             {
-                Console.WriteLine("Directories not found. Please verify that Directories are in correct order, or generate directories to continue");
+                Console.WriteLine("Directories not found. Please verify that directories exist and are in correct order, or generate directories to continue");
             }
         }
 
