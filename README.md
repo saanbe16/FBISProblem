@@ -1,7 +1,7 @@
 ### Expected time: 5-6 hours
 ### Actual time: 6 hours and 23 minutes
 
-##Instructions
+## Instructions
 
 Upon opening the FBISProblem folder you will be met with all the different files used for the assignment. The main method can be found in the **Solution.cs** file. 
 TO correctly run this program you will need to have the following folders placed in /FBISProblem/FBISProblem/bin/Debug/net7.0/
